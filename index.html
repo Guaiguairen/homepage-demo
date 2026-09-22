@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="王天宁的个人主页 —— 复旦大学经济学院 · 国际商务硕士在读 · 用数据回答经济问题，也在认真学 AI">
+<title>王天宁 | 个人主页</title>
+
+<!--
+  ▍开发说明（给维护者的备忘）
+  1. 本页信息提取自《个人简历-学术.docx》；论文数据来自 ORCID 公开 API。
+  2. 页面不依赖任何在线 CDN / 在线字体，双击即可预览，Vercel 直接托管整个文件夹。
+  3. 结构：
+       index.html                主页面
+       assets/resume.pdf         简历 PDF（由《个人简历-学术.docx》经 Word 导出）
+       data/publications.js      论文数据静态底稿（联网时页面会再拉一次 ORCID 补新条目）
+       scripts/sync-orcid.py     从 ORCID 重新生成 data/publications.js 的脚本
+  4. 更新论文：python scripts/sync-orcid.py 0009-0009-2390-4129
+     注意脚本会覆盖 works 段，但人工补充的 extras 段（无 DOI 的中文期刊论文）会被保留。
+  5. 想换真人照片：把头像所在行的内容换成
+     <img class="avatar" src="照片文件名" alt="王天宁">
+  6. Ctrl+P 可把整页打印 / 另存为 PDF，已做打印样式（会隐藏导航与按钮）。
+-->
+
+<style>
+  /* ========== 主题：暖调「奶油焦糖」，比上一版更放松一些 ========== */
+  :root {
+    --cream: #faf6ee;         /* 页面底色：奶油 */
+    --card: #fffdf8;          /* 卡片底色 */
+    --ink: #35312b;           /* 主文字：暖墨色 */
+    --ink-soft: #7a7266;      /* 次要文字 */
+    --cocoa: #c96f2a;         /* 主强调色：焦糖 */
+    --cocoa-deep: #9a4f17;   /* 焦糖深 */
+    --cocoa-soft: #f6e3d0;   /* 焦糖浅底 */
+    --leaf: #6f8f6a;          /* 点缀绿（数据小字/标签用） */
+    --line: #ece1cf;          /* 分隔线 */
+    --radius: 20px;
+    --container: 900px;
+    --shadow: 0 10px 30px -18px rgba(120, 90, 40, .35);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                 "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+                 "Helvetica Neue", Arial, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.8;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--cocoa-deep); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: var(--container); margin: 0 auto; padding: 0 22px; }
+
+  /* ========== 按钮 ========== */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--cocoa); color: #fff;
+    border: 1px solid var(--cocoa);
+    padding: 10px 20px; border-radius: 999px;
+    font-size: 14.5px; font-weight: 600; line-height: 1.5;
+    cursor: pointer; transition: .2s; white-space: nowrap;
+  }
+  .btn:hover { background: var(--cocoa-deep); border-color: var(--cocoa-deep); color: #fff; text-decoration: none; transform: translateY(-2px); }
+  .btn:active { transform: translateY(0); }
+  .btn.ghost { background: #fff; color: var(--cocoa-deep); border-color: #efd2b8; }
+  .btn.ghost:hover { background: var(--cocoa-soft); color: var(--cocoa-deep); }
+  .btn.small { padding: 6px 15px; font-size: 13px; }
+  .btn .size { font-weight: 400; color: var(--cocoa-soft); }
+
+  /* ========== 顶部导航 ========== */
+  .site-header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(250, 246, 238, .88);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 16px; }
+  .nav-brand { font-weight: 800; letter-spacing: 1px; color: var(--ink); flex: none; }
+  .nav-brand em { font-style: normal; color: var(--cocoa); }
+  .nav-links { display: flex; gap: 20px; flex-wrap: nowrap; }
+  .nav-links a { color: var(--ink-soft); font-size: 14.5px; }
+  .nav-links a:hover { color: var(--cocoa-deep); text-decoration: none; }
+  .nav-cta { flex: none; }
+
+  /* ========== Hero ========== */
+  .hero { padding: 64px 0 34px; }
+  .hero-card {
+    background: linear-gradient(160deg, #fffdf8, #fbeedc);
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+    padding: 44px 40px;
+    display: flex; align-items: center; gap: 34px;
+  }
+  /* 姓名首字头像（暂无照片，可换成 <img>，见文件顶部注释） */
+  .avatar {
+    flex: none;
+    width: 118px; height: 118px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--cocoa), #e9a15f);
+    color: #fff;
+    font-size: 52px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 12px 24px -12px rgba(160, 90, 30, .6);
+  }
+  .hero-name { font-size: 34px; font-weight: 800; letter-spacing: 2px; margin-bottom: 4px; }
+  .hero-title { color: var(--ink-soft); font-size: 17px; margin-bottom: 10px; }
+  .hero-badge {
+    display: inline-block;
+    background: var(--cocoa-soft);
+    border: 1px solid #efd2b8;
+    color: var(--cocoa-deep);
+    font-size: 13px;
+    padding: 3px 14px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  .hero-tagline { max-width: 540px; color: var(--ink-soft); font-size: 15.5px; }
+
+  /* 基本信息小标签 */
+  .facts { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .facts span {
+    font-size: 13px; color: var(--ink-soft);
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 999px; padding: 2px 14px;
+  }
+  .hero-actions { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+  /* ========== 数据高亮带 ========== */
+  .stats { margin: 26px 0 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .stat {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 18px 12px; text-align: center;
+  }
+  .stat b { display: block; font-size: 26px; color: var(--cocoa-deep); font-weight: 800; }
+  .stat small { color: var(--ink-soft); font-size: 13px; }
+
+  /* ========== 通用区块 ========== */
+  .section { padding: 52px 0 8px; }
+  .section-title {
+    font-size: 24px; font-weight: 800;
+    margin-bottom: 8px; display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .dot { color: var(--cocoa); font-size: 20px; }
+  .section-sub { color: var(--ink-soft); margin-bottom: 26px; font-size: 14px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 22px 24px; margin-bottom: 16px;
+    box-shadow: 0 6px 20px -20px rgba(120, 90, 40, .4);
+  }
+
+  /* ========== 关于我 ========== */
+  .about .card p { margin-bottom: 10px; }
+  .about .card p:last-child { margin-bottom: 0; }
+  .about em { color: var(--cocoa-deep); font-style: normal; font-weight: 700; }
+
+  /* ========== 教育经历 ========== */
+  .edu-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px; }
+  .edu-school { font-size: 18px; font-weight: 800; }
+  .edu-degree { color: var(--ink-soft); font-size: 14px; }
+  .edu-date {
+    font-size: 13px; color: var(--cocoa-deep);
+    background: var(--cocoa-soft); border-radius: 999px;
+    padding: 1px 12px; white-space: nowrap;
+  }
+  .edu-detail { font-size: 14.5px; color: var(--ink-soft); margin-top: 8px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .mini-chip {
+    font-size: 12.5px; color: var(--ink-soft);
+    background: var(--cream); border: 1px solid var(--line);
+    border-radius: 999px; padding: 1px 10px;
+  }
+
+  /* ========== ORCID 学术档案 ========== */
+  .orcid-card {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    background: linear-gradient(135deg, #fffdf8, #eef3e9);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px 24px; margin-bottom: 16px;
+  }
+  .orcid-card .spacer { flex: 1 1 20px; }
+  .orcid-id { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink-soft); }
+  .orcid-id b { color: var(--ink); font-weight: 700; letter-spacing: .5px; }
+  .orcid-mark { width: 22px; height: 22px; flex: none; }
+
+  .work h3 { font-size: 16px; font-weight: 700; line-height: 1.6; }
+  .work-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+  .work-year {
+    flex: none; font-size: 13px; color: var(--cocoa-deep);
+    background: var(--cocoa-soft); border-radius: 999px; padding: 1px 12px; white-space: nowrap;
+  }
+  .work-journal { font-size: 13.5px; color: var(--leaf); font-weight: 600; margin-top: 4px; }
+  .work-authors { font-size: 13px; color: var(--ink-soft); margin-top: 6px; line-height: 1.7; }
+  .work-authors b { color: var(--ink); font-weight: 700; }
+  .work-foot { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .badge { font-size: 12px; border-radius: 6px; padding: 2px 10px; white-space: nowrap; }
+  .badge.first { background: #eef3e9; color: #3f5c3b; border: 1px solid #cfe0c8; }
+  .badge.pos { background: var(--cream); color: var(--ink-soft); border: 1px solid var(--line); }
+  .doi-link {
+    font-size: 12.5px; color: var(--cocoa-deep);
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 6px; padding: 2px 10px; word-break: break-all;
+  }
+  .doi-link:hover { border-color: #e8b98c; text-decoration: none; }
+  details.work-abs { margin-top: 10px; }
+  details.work-abs summary {
+    cursor: pointer; font-size: 13px; color: var(--cocoa-deep);
+    list-style: none; outline: none; user-select: none;
+  }
+  details.work-abs summary::-webkit-details-marker { display: none; }
+  details.work-abs summary::before { content: "\25B8 "; }
+  details.work-abs[open] summary::before { content: "\25BE "; }
+  details.work-abs p {
+    font-size: 13.6px; color: var(--ink-soft); margin-top: 8px; line-height: 1.75;
+    border-left: 2px solid var(--line); padding-left: 12px;
+  }
+  .work.manual { background: #fbf8f2; border-style: dashed; }
+  .work.manual h3 { font-size: 14.5px; }
+  .sync-note { font-size: 12.5px; color: var(--ink-soft); margin-top: 14px; display: flex; align-items: center; gap: 7px; }
+  .dot-live, .dot-static { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+  .dot-live { background: var(--leaf); }
+  .dot-static { background: #c9bda6; }
+
+  /* ========== 作品集 / 竞赛项目 ========== */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .proj {
+    margin: 0; display: flex; flex-direction: column; position: relative; overflow: hidden;
+    transition: .22s;
+  }
+  .proj:hover { transform: translateY(-4px); border-color: #e8b98c; box-shadow: 0 14px 26px -22px rgba(120, 90, 40, .55); }
+  .proj .idx {
+    position: absolute; right: 16px; top: 6px;
+    font-size: 52px; font-weight: 800; color: #f4e7d5; line-height: 1; user-select: none;
+  }
+  .proj .period { font-size: 12px; color: var(--ink-soft); letter-spacing: .5px; margin-bottom: 6px; position: relative; }
+  .proj h3 { font-size: 15.5px; position: relative; }
+  .proj .rank {
+    display: inline-block; font-size: 12.5px; color: var(--leaf); font-weight: 700;
+    background: #eef3e9; border: 1px solid #dbe8d5; border-radius: 999px; padding: 1px 11px; margin-top: 8px;
+  }
+  .proj p { font-size: 13.8px; color: var(--ink-soft); margin-top: 10px; flex: 1; position: relative; }
+  .proj .proj-foot { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; position: relative; }
+  .proj .proj-foot .mini-chip { margin-top: 0; }
+
+  /* ========== 技能证书 ========== */
+  .skill-line { display: flex; justify-content: space-between; font-size: 14.5px; margin: 14px 0 6px; }
+  .bar { height: 9px; border-radius: 5px; background: #f1e9da; overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 5px; background: linear-gradient(90deg, var(--cocoa), #eaa15e); }
+  .cert-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 24px; }
+  .cert { text-align: center; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 10px; }
+  .cert b { display: block; font-size: 18px; color: var(--cocoa-deep); }
+  .cert small { color: var(--ink-soft); font-size: 12.5px; }
+
+  /* ========== 生活 ========== */
+  .life-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .life { text-align: center; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 12px 18px; transition: .2s; }
+  .life:hover { transform: translateY(-4px); border-color: #e8b98c; }
+  .life .ico { font-size: 30px; }
+  .life p { font-size: 14px; color: var(--ink-soft); margin-top: 6px; }
+
+  /* ========== 联系 ========== */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .contact { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 22px; text-align: center; font-size: 15px; }
+  .contact .label { font-size: 12.5px; color: var(--ink-soft); display: block; margin-bottom: 4px; }
+  .contact a { word-break: break-all; }
+  .contact .todo { color: var(--cocoa); }
+  .contact.dl { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+  .contact.dl .meta { font-size: 12.5px; color: var(--ink-soft); }
+
+  /* ========== 页脚 ========== */
+  footer { margin-top: 48px; padding: 28px 0; text-align: center; color: var(--ink-soft); font-size: 13px; border-top: 1px solid var(--line); }
+
+  /* ========== 回到顶部 ========== */
+  #backTop {
+    position: fixed; right: 20px; bottom: 20px; width: 42px; height: 42px;
+    border-radius: 50%; border: 1px solid var(--line); background: var(--card);
+    color: var(--ink-soft); font-size: 18px; cursor: pointer; box-shadow: var(--shadow);
+    opacity: 0; visibility: hidden; transition: .25s;
+  }
+  #backTop.show { opacity: 1; visibility: visible; }
+  #backTop:hover { background: var(--cocoa); color: #fff; border-color: var(--cocoa); }
+
+  /* ========== 窄屏 ========== */
+  @media (max-width: 760px) {
+    .hero-card { flex-direction: column; text-align: center; padding: 32px 22px; }
+    .hero-tagline { max-width: none; }
+    .hero-actions { justify-content: center; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .contact-grid { grid-template-columns: 1fr; }
+    .life-grid { grid-template-columns: repeat(2, 1fr); }
+    .cert-grid { grid-template-columns: 1fr 1fr; }
+    .nav-links { gap: 12px; overflow-x: auto; scrollbar-width: none; }
+    .nav-links::-webkit-scrollbar { display: none; }
+    .nav-cta { display: none; }
+  }
+
+  /* ========== 打印 / 另存为 PDF ========== */
+  @media print {
+    body { background: #fff; font-size: 12px; }
+    .site-header, #backTop, .hero-actions, .nav-cta, .hero-badge { display: none; }
+    .hero { padding: 0 0 10px; }
+    .hero-card { box-shadow: none; background: #fff; padding: 0; border: none; }
+    .section { padding: 18px 0 4px; }
+    .card { box-shadow: none; border-color: #dcd6cc; break-inside: avoid; page-break-inside: avoid; }
+    .stat, .cert, .life, .contact { box-shadow: none; }
+    details.work-abs { display: none; }
+    a { color: var(--ink); text-decoration: none; }
+    footer { margin-top: 14px; padding: 12px 0; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- ==================== 顶部导航 ==================== -->
+<header class="site-header">
+  <div class="wrap nav-inner">
+    <a href="#top" class="nav-brand">王天宁<em>.</em></a>
+    <nav class="nav-links">
+      <a href="#about">关于我</a>
+      <a href="#edu">教育经历</a>
+      <a href="#pubs">科研发表</a>
+      <a href="#awards">作品集</a>
+      <a href="#skills">技能证书</a>
+      <a href="#life">生活</a>
+      <a href="#contact">联系我</a>
+    </nav>
+    <a class="btn small nav-cta" href="assets/resume.pdf" download="WangTianning-Resume.pdf">下载简历</a>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+
+  <!-- ==================== Hero ==================== -->
+  <section class="hero">
+    <div class="hero-card">
+      <div class="avatar" aria-hidden="true">🥬</div>         <!-- 头像：🥬 emoji 占位，可换真人照片 <img> -->
+      <div>
+        <h1 class="hero-name">王天宁</h1>
+        <p class="hero-title">复旦大学 · 经济学院 · 国际商务硕士（在读）</p>
+        <p class="hero-tagline">一个有点菜，但在认真变好的普通人 🥬</p>
+        <div class="facts">
+          <span>📍 浙江宁波人</span>
+          <span>🎓 河海大学 · 国际经济与贸易</span>
+          <span>🌱 AI 与数据分析课程学习中</span>
+          <span><a href="https://orcid.org/0009-0009-2390-4129" target="_blank" rel="noopener">ORCID · 0009-0009-2390-4129</a></span>
+        </div>
+        <div class="hero-actions">
+          <a class="btn" href="assets/resume.pdf" download="WangTianning-Resume.pdf">
+            ↓ 下载我的简历<span class="size"> PDF · 322 KB</span>
+          </a>
+          <a class="btn ghost" href="#pubs">看看我发的论文 →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 数据高亮带：让关键成绩一眼可见 -->
+    <div class="stats">
+      <div class="stat"><b>4.95 / 5.0</b><small>本科 GPA</small></div>
+      <div class="stat"><b>1 / 79</b><small>专业综合排名</small></div>
+      <div class="stat"><b>国家奖学金</b><small>本科期间</small></div>
+      <div class="stat"><b>4 篇</b><small>已发表论文（含 SSCI / SCIE）</small></div>
+    </div>
+  </section>
+
+  <!-- ==================== 关于我 ==================== -->
+  <section id="about" class="section about">
+    <h2 class="section-title"><span class="dot">☕</span> 关于我</h2>
+    <p class="section-sub">先聊聊我是谁，而不只是我的履历</p>
+    <div class="card">
+      <p>你好呀，我是 <em>王天宁</em>，浙江宁波人。本科在河海大学读国际经济与贸易。</p>
+      <p>现在是复旦大学经济学院国际商务硕士在读，方向偏 <em>国际金融与投资</em>。之前发过几篇论文，大多属于环境经济学的领域；最近在上这门《人工智能与数据分析》课，想把人工智能大模型这个工具真正用好。</p>
+      <p>生活里我就是个普通年轻人：泡健身房、和朋友组排开黑、刷 B 站、耳机里永远有歌。想做的事很简单——认真把事情做踏实，也好好过自己的日子。</p>
+    </div>
+  </section>
+
+  <!-- ==================== 教育经历 ==================== -->
+  <section id="edu" class="section">
+    <h2 class="section-title"><span class="dot">🎓</span> 教育经历</h2>
+    <p class="section-sub">Education</p>
+
+    <div class="card">
+      <div class="edu-head">
+        <div>
+          <span class="edu-school">复旦大学 · 经济学院</span>
+          <span class="edu-degree"> · 国际商务 · 硕士研究生（在读）</span>
+        </div>
+        <span class="edu-date">2026.09 — 至今</span>
+      </div>
+      <p class="edu-detail">研究方向：国际金融与投资。正在修读《人工智能与数据分析》，尝试用机器学习工具深化自己的金融研究。</p>
+    </div>
+
+    <div class="card">
+      <div class="edu-head">
+        <div>
+          <span class="edu-school">河海大学</span>
+          <span class="edu-degree"> · 国际经济与贸易 · 本科</span>
+        </div>
+        <span class="edu-date">2022.09 — 2026.06</span>
+      </div>
+      <p class="edu-detail">GPA 4.95 / 5.0，专业综合排名 1/79。国家奖学金、校学业优秀奖学金（2 次）等；获校优秀学生、校优秀共青团干部、校优秀班长。</p>
+      <div class="chip-row">
+        <span class="mini-chip">计量经济学 98</span>
+        <span class="mini-chip">国际金融 95</span>
+        <span class="mini-chip">金融学 95</span>
+        <span class="mini-chip">国际经济学 94</span>
+        <span class="mini-chip">市场营销 94</span>
+        <span class="mini-chip">财务管理 94</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 科研与发表（数据来自 ORCID） ==================== -->
+  <section id="pubs" class="section">
+    <h2 class="section-title"><span class="dot">📄</span> 科研与发表</h2>
+    <p class="section-sub">Research &amp; Publications · 数据同步自我的 ORCID 学术档案</p>
+
+    <div class="orcid-card">
+      <svg class="orcid-mark" viewBox="0 0 32 32" role="img" aria-label="ORCID 标识">
+        <circle cx="16" cy="16" r="16" fill="#A6CE39"/>
+        <text x="16" y="21.5" text-anchor="middle" font-family="Helvetica, Arial, sans-serif"
+              font-size="13" font-weight="700" fill="#ffffff">iD</text>
+      </svg>
+      <span class="orcid-id"><b>ORCID iD</b> 0009-0009-2390-4129</span>
+      <span class="spacer"></span>
+      <a class="btn ghost small" href="https://orcid.org/0009-0009-2390-4129" target="_blank" rel="noopener">
+        在 ORCID 上查看 →
+      </a>
+    </div>
+
+    <div id="pubList">
+      <div class="card"><p style="font-size:14px;color:var(--ink-soft)">正在加载论文列表…</p></div>
+    </div>
+
+    <p class="sync-note" id="syncNote"></p>
+  </section>
+
+  <!-- ==================== 作品集 / 竞赛与项目 ==================== -->
+  <section id="awards" class="section">
+    <h2 class="section-title"><span class="dot">🏆</span> 作品集</h2>
+    <p class="section-sub">Portfolio · 把课本里的模型，真刀真枪跑一遍</p>
+    <div class="grid-2">
+      <div class="card proj">
+        <span class="idx">01</span>
+        <div class="period">2024.10 — 2025.05</div>
+        <h3>「正大杯」全国大学生市场调查与分析大赛</h3>
+        <span class="rank">省赛三等奖 · 负责人</span>
+        <p>聚焦银发经济，自建量化指标体系研究老年群体消费行为：Python 爬取文本 + 问卷样本库，文本挖掘与统计分析支撑商业结论。</p>
+        <div class="proj-foot">
+          <span class="mini-chip">Python 爬虫</span><span class="mini-chip">文本挖掘</span><span class="mini-chip">问卷设计</span>
+        </div>
+      </div>
+      <div class="card proj">
+        <span class="idx">02</span>
+        <div class="period">2024.11</div>
+        <h3>OCALE 全国跨境电商创新创业大赛</h3>
+        <span class="rank">全国二等奖 · 负责人</span>
+        <p>独立编制成本核算表，12 周期滚动测算；跟踪竞品与需求动态调库存与定价，最终 ROE 接近 150%。</p>
+        <div class="proj-foot">
+          <span class="mini-chip">成本核算建模</span><span class="mini-chip">库存与定价</span><span class="mini-chip">Excel</span>
+        </div>
+      </div>
+      <div class="card proj">
+        <span class="idx">03</span>
+        <div class="period">2024.03 — 2024.05</div>
+        <h3>「学创杯」全国大学生创业综合模拟大赛</h3>
+        <span class="rank">省赛二等奖 · 负责人</span>
+        <p>主导商业计划书与多周期市场进入策略，自建排产与报价测算表，在复杂市场博弈中实现成本控制与利润最大化。</p>
+        <div class="proj-foot">
+          <span class="mini-chip">商业计划书</span><span class="mini-chip">博弈模拟</span><span class="mini-chip">排产测算</span>
+        </div>
+      </div>
+      <div class="card proj" style="border-style:dashed;background:#fbf8f2">
+        <span class="idx">04</span>
+        <div class="period">2026.09 — 至今</div>
+        <h3>这个主页本身</h3>
+        <span class="rank">课程作业 · 独立完成</span>
+        <p>纯手写 HTML / CSS / 原生 JS，零依赖零 CDN；论文列表由 ORCID 公共 API 驱动，静态底稿与实时数据双保险。</p>
+        <div class="proj-foot">
+          <span class="mini-chip">HTML / CSS</span><span class="mini-chip">原生 JS</span><span class="mini-chip">REST API</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 技能证书 ==================== -->
+  <section id="skills" class="section">
+    <h2 class="section-title"><span class="dot">🛠️</span> 技能证书</h2>
+    <p class="section-sub">Skills · 自我评估，边学边更新</p>
+    <div class="card">
+      <div>
+        <div class="skill-line"><span>Python（爬虫 · 数据分析 · 机器学习入门）</span><span>基础但够用</span></div>
+        <div class="bar"><i style="width: 55%"></i></div>
+      </div>
+      <div>
+        <div class="skill-line"><span>MS Office（Excel 建模与分析）</span><span>熟练</span></div>
+        <div class="bar"><i style="width: 85%"></i></div>
+      </div>
+      <div>
+        <div class="skill-line"><span>剪映 / Photoshop</span><span>基础</span></div>
+        <div class="bar"><i style="width: 35%"></i></div>
+      </div>
+      <div>
+        <div class="skill-line"><span>经济计量（VAR、量化图模型等）</span><span>课程 + 科研历练</span></div>
+        <div class="bar"><i style="width: 70%"></i></div>
+      </div>
+    </div>
+
+    <div class="cert-grid">
+      <div class="cert"><b>CET-6 · 618</b><small>英语六级</small></div>
+      <div class="cert"><b>CET-4 · 636</b><small>英语四级</small></div>
+      <div class="cert"><b>优秀</b><small>全国计算机等级考试二级（Python）</small></div>
+    </div>
+  </section>
+
+  <!-- ==================== 生活 ==================== -->
+  <section id="life" class="section">
+    <h2 class="section-title"><span class="dot">🌿</span> 生活里的一些小事</h2>
+    <p class="section-sub">Out of the office · 科研之外，我也有普通年轻人的爱好</p>
+    <div class="life-grid">
+      <div class="life"><div class="ico">🏋️</div><p>健身<br>撸铁是我最好的解压方式</p></div>
+      <div class="life"><div class="ico">🎮</div><p>打游戏<br>近期沉迷 FPS 和团队合作类</p></div>
+      <div class="life"><div class="ico">📺</div><p>刷 B 站<br>学习、游戏、番剧三连刷</p></div>
+      <div class="life"><div class="ico">🎵</div><p>听歌<br>耳机是出门的必备配件</p></div>
+    </div>
+  </section>
+
+  <!-- ==================== 联系我 ==================== -->
+  <section id="contact" class="section">
+    <h2 class="section-title"><span class="dot">✉️</span> 联系我</h2>
+    <p class="section-sub">想聊聊论文、比赛或学习 AI 的心得，欢迎随时找我</p>
+    <div class="contact-grid">
+      <div class="contact">
+        <span class="label">邮箱 · 复旦</span>
+        <a href="mailto:tnwang26@m.fudan.edu.cn">tnwang26@m.fudan.edu.cn</a>
+      </div>
+      <div class="contact">
+        <span class="label">ORCID 学术档案</span>
+        <a href="https://orcid.org/0009-0009-2390-4129" target="_blank" rel="noopener">0009-0009-2390-4129</a>
+      </div>
+      <div class="contact dl">
+        <span class="label">个人简历</span>
+        <a class="btn small" href="assets/resume.pdf" download="WangTianning-Resume.pdf">↓ 下载 PDF</a>
+        <span class="meta">PDF · 322 KB · 更新于 2026.09</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ==================== 页脚 ==================== -->
+<footer>
+  <div class="wrap">© <span id="year"></span> 王天宁 · 认真研究，也好好生活</div>
+</footer>
+
+<button id="backTop" aria-label="回到顶部">↑</button>
+
+<script src="data/publications.js"></script>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  var backTop = document.getElementById("backTop");
+  window.addEventListener("scroll", function () {
+    backTop.classList.toggle("show", window.scrollY > window.innerHeight);
+  });
+  backTop.addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+</script>
+
+<script>
+/* =========================================================================
+   论文列表渲染：先画静态底稿，联网时再用 ORCID 实时数据补进新条目。
+   目的是断网 / ORCID 抽风的时候，论文区也不会开天窗。
+   ========================================================================= */
+(function () {
+  var box  = document.getElementById("pubList");
+  var note = document.getElementById("syncNote");
+  if (!box) return;
+
+  var base  = window.PUBLICATIONS || null;
+  var ORCID = (base && base.orcid) || "0009-0009-2390-4129";
+  var OWNER = (base && base.ownerNames) || ["Tianning Wang", "王天宁"];
+
+  function esc(s) {
+    return String(s === null || s === undefined ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function pad(n) { return String(n).padStart(2, "0"); }
+  function today() {
+    var d = new Date();
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+  }
+  function isOwner(name) {
+    var n = String(name || "").toLowerCase();
+    return OWNER.some(function (o) {
+      var k = String(o).toLowerCase();
+      return n.indexOf(k) >= 0 || k.indexOf(n) >= 0;
+    });
+  }
+  function list(data, key) {
+    return (data && data[key]) ? data[key] : [];
+  }
+
+  function authorsLine(names) {
+    if (!names || !names.length) return "";
+    var shown = names.slice(0, 10);
+    var text = shown.map(function (n) {
+      return isOwner(n) ? "<b>" + esc(n) + "</b>" : esc(n);
+    }).join("、");
+    if (names.length > 10) text += " 等 " + names.length + " 人";
+    return text;
+  }
+
+  function workCard(w) {
+    var year = w.year || (w.date ? String(w.date).slice(0, 4) : "");
+    var h = '<div class="card work"><div class="work-head">';
+    h += '<h3>' + esc(w.title) + '</h3>';
+    if (year) h += '<span class="work-year">' + esc(year) + '</span>';
+    h += '</div>';
+
+    if (w.journal) h += '<div class="work-journal">' + esc(w.journal) + '</div>';
+
+    var al = authorsLine(w.authors);
+    if (al) h += '<div class="work-authors">' + al + '</div>';
+
+    var foot = "";
+    if (w.authorPosition === 1) foot += '<span class="badge first">第一作者</span>';
+    else if (w.authorPosition) foot += '<span class="badge pos">第 ' + w.authorPosition + ' 作者 / 共 ' + w.authorCount + ' 人</span>';
+    if (w.doi) {
+      foot += '<a class="doi-link" href="' + esc(w.url || ("https://doi.org/" + w.doi)) +
+              '" target="_blank" rel="noopener">DOI · ' + esc(w.doi) + '</a>';
+    }
+    if (foot) h += '<div class="work-foot">' + foot + '</div>';
+
+    if (w.abstract) {
+      h += '<details class="work-abs"><summary>展开摘要</summary><p>' + esc(w.abstract) + '</p></details>';
+    }
+    return h + '</div>';
+  }
+
+  function extraCard(e) {
+    return '<div class="card work manual">' +
+             '<h3>' + esc(e.title) + '</h3>' +
+             '<div class="work-journal">' + esc(e.journal) + '</div>' +
+             '<div class="work-authors">' + esc(e.note || "") + '</div>' +
+           '</div>';
+  }
+
+  function render(data, mode) {
+    if (!data) return false;
+    var html = "";
+    list(data, "works").forEach(function (w) { html += workCard(w); });
+    list(data, "extras").forEach(function (e) { html += extraCard(e); });
+    if (!html) return false;
+
+    box.innerHTML = html;
+    if (mode === "live") {
+      note.innerHTML = '<span class="dot-live"></span> 已与 ORCID 实时同步 · ' + today();
+    } else if (data.syncedAt) {
+      note.innerHTML = '<span class="dot-static"></span> 使用本地数据 · 同步于 ' + esc(data.syncedAt) + '（本次未取到更新）';
+    } else {
+      note.innerHTML = '<span class="dot-static"></span> 使用本地数据';
+    }
+    return true;
+  }
+
+  function fallback() {
+    box.innerHTML = '<div class="card"><p style="font-size:14px;color:var(--ink-soft)">' +
+      '论文列表暂时无法加载。完整发表记录请查看 ' +
+      '<a href="https://orcid.org/' + esc(ORCID) + '" target="_blank" rel="noopener">ORCID 主页</a>，' +
+      '或在本页底部下载简历 PDF。</p></div>';
+    note.innerHTML = '<span class="dot-static"></span> 未能加载数据';
+  }
+
+  // 1) 先把静态底稿画出来，保证一定有事可看
+  var drawn = base ? render(base, "static") : false;
+
+  if (typeof fetch !== "function") { if (!drawn) fallback(); return; }
+
+  // 2) 联网再拉一次 ORCID，只补静态里没有的新条目（已有条目保留更完整的作者位次）
+  fetch("https://pub.orcid.org/v3.0/" + encodeURIComponent(ORCID) + "/works",
+        { headers: { Accept: "application/json" }, cache: "no-store" })
+    .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(function (d) {
+      var live = [];
+      list(d, "group").forEach(function (g) {
+        var rows = list(g, "work-summary").slice().sort(function (a, b) {
+          return (parseInt(a["display-index"], 10) || 0) - (parseInt(b["display-index"], 10) || 0);
+        });
+        var w = rows[0];
+        if (!w) return;
+        if (w.visibility && w.visibility !== "public") return;
+        var doi = null, link = null;
+        list(w["external-ids"], "external-id").forEach(function (e) {
+          if (!doi && String(e["external-id-type"]).toLowerCase() === "doi") {
+            doi = e["external-id-value"];
+            link = (e["external-id-url"] || {}).value || "https://doi.org/" + doi;
+          }
+        });
+        live.push({
+          title: ((w.title || {}).title || {}).value || "(untitled)",
+          journal: (w["journal-title"] || {}).value || "",
+          year: ((w["publication-date"] || {}).year || {}).value || null,
+          doi: doi,
+          url: link || (w.url || {}).value || null,
+          authors: [], authorPosition: null, authorCount: null, abstract: ""
+        });
+      });
+
+      var seen = {};
+      var merged = list(base, "works").slice();
+      merged.forEach(function (w) { seen[String(w.doi || w.title).toLowerCase()] = 1; });
+      live.forEach(function (w) {
+        var k = String(w.doi || w.title).toLowerCase();
+        if (!seen[k]) { seen[k] = 1; merged.push(w); }
+      });
+      merged.sort(function (a, b) { return (parseInt(b.year, 10) || 0) - (parseInt(a.year, 10) || 0); });
+
+      render({ works: merged, extras: list(base, "extras") }, "live");
+    })
+    .catch(function () { if (!drawn) fallback(); });
+})();
+</script>
+
+</body>
+</html>

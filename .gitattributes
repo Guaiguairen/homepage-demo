@@ -1,0 +1,13 @@
+# 换行符策略：仓库里一律存 LF，检出也保持 LF。
+# 这是个纯静态网页项目，不依赖 Windows 换行；统一 LF 可以避免跨平台的无意义 diff。
+* text=auto eol=lf
+
+# 二进制资源禁止做任何换行转换，否则文件会被写坏
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
